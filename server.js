@@ -4,13 +4,16 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import cartRoutes from "./routes/cartRoutes.js";  
+import foodRoutes from "./routes/foodRoutes.js";
+
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
-app.use("/api/cart", cartRoutes);  // ← ADD
+app.use("/api/cart", cartRoutes);
+app.use("/api/food", foodRoutes); // ← ADD
 app.use(cors());
 
 // ================= DB =================
