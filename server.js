@@ -100,5 +100,69 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+// ================= FOOD SCHEMA =================
+const foodSchema = new mongoose.Schema({
+  name:     { type: String, required: true },
+  image:    { type: String, required: true },
+  price:    { type: Number, required: true },
+  rating:   { type: Number, required: true },
+  category: { type: String, required: true },
+});
 
+const Food = mongoose.model("Food", foodSchema);
+
+
+// ================= SEED FOODS (Pehli baar data add karo) =================
+app.get("/api/seed", async (req, res) => {
+  try {
+    await Food.deleteMany(); // Purana data delete karo
+
+    const foods = [
+      // Burgers
+      { name: "Classic Cheeseburger", image: "burger/b.jpeg",  price: 1005, rating: 4.7, category: "Burger" },
+      { name: "Bacon Burger",         image: "burger/b2.jpeg", price: 1500, rating: 4.9, category: "Burger" },
+      { name: "Mushroom Burger",      image: "burger/b3.jpeg", price: 1000, rating: 4.0, category: "Burger" },
+      { name: "BBQ Burger",           image: "burger/b7.jpeg", price: 705,  rating: 4.3, category: "Burger" },
+      { name: "Double Cheeseburger",  image: "burger/b4.jpeg", price: 755,  rating: 4.5, category: "Burger" },
+      { name: "Chicken Burger",       image: "burger/b5.jpeg", price: 675,  rating: 4.3, category: "Burger" },
+      { name: "Burger King",          image: "burger/b6.jpeg", price: 875,  rating: 4.4, category: "Burger" },
+      // Taco
+      { name: "Carnitas Taco",   image: "taco/taco1.jpeg", price: 200, rating: 4.7, category: "Taco" },
+      { name: "Carne Taco",      image: "taco/taco2.jpeg", price: 250, rating: 4.6, category: "Taco" },
+      { name: "Fish Taco",       image: "taco/taco3.jpeg", price: 300, rating: 4.3, category: "Taco" },
+      { name: "Chicken Taco",    image: "taco/taco4.jpeg", price: 350, rating: 4.4, category: "Taco" },
+      { name: "Barbacoa Taco",   image: "taco/taco5.jpeg", price: 189, rating: 4.6, category: "Taco" },
+      { name: "Vegetarian Taco", image: "taco/taco6.jpeg", price: 450, rating: 4.7, category: "Taco" },
+      // Pizza
+      { name: "Margherita",  image: "pizza/p1.jpeg", price: 1200, rating: 4.6,  category: "Pizza" },
+      { name: "Pepperoni",   image: "pizza/p2.jpeg", price: 970,  rating: 4.9,  category: "Pizza" },
+      { name: "BBQ Chicken", image: "pizza/p3.jpeg", price: 1000, rating: 4.60, category: "Pizza" },
+      { name: "Hawaiian",    image: "pizza/p4.jpeg", price: 1500, rating: 4.4,  category: "Pizza" },
+      { name: "Veggie",      image: "pizza/p5.jpeg", price: 900,  rating: 4.8,  category: "Pizza" },
+      { name: "Meat Lovers", image: "pizza/p6.jpeg", price: 1200, rating: 4.67, category: "Pizza" },
+      { name: "Four Cheese", image: "pizza/p7.jpeg", price: 1900, rating: 4.7,  category: "Pizza" },
+    ];
+
+    await Food.insertMany(foods);
+
+    res.json({ success: true, message: "Foods added successfully!" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+
+// ================= GET ALL FOODS =================
+app.get("/api/foods", async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    const filter = category ? { category } : {};
+    const foods = await Food.find(filter);
+
+    res.json({ success: true, foods });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 export default app;
