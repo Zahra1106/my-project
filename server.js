@@ -3,12 +3,14 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
+import cartRoutes from "./routes/cartRoutes.js";  
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+app.use("/api/cart", cartRoutes);  // ← ADD
 app.use(cors());
 
 // ================= DB =================
