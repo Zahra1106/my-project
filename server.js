@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import cartRoutes from "./routes/cartRoutes.js";  
 import foodRoutes from "./routes/foodRoutes.js";
 import nodemailer from "nodemailer";
+import orderRoutes from "./routes/orderRoutes.js";  // ← ADD
 
 
 dotenv.config();
@@ -15,6 +16,7 @@ const app = express();
 app.use(express.json());
 app.use("/api/cart", cartRoutes);
 app.use("/api/food", foodRoutes); // ← ADD
+app.use("/api/orders", orderRoutes);  // ← ADD
 app.use(cors());
 
 // ================= DB =================
